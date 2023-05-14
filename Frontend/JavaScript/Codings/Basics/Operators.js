@@ -11,3 +11,11 @@ var discountPercent = ((listingPrice - sellingPrice) / listingPrice) * 100;
 displayDiscountPercentage = Math.round(discountPercent);
 
 console.log("Discount percentage is: "+displayDiscountPercentage+" % Offer");
+
+
+var result = listingPrice > sellingPrice;
+// if I wanted to find what data-type my variable holding use "typeof"
+console.log(typeof result)
+
+
+// to read more documentations visit https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence
