@@ -1,7 +1,7 @@
 var firstName = "Gohul";
-var lastName = "Nath V"
+var lastName = "Nath V";
 var userEmail = "gohulnathv.dev@gmail.com";
-var userAddress = "7/330, Pudhu Nagar, Paramakudi"
+var userAddress = "7/330, Pudhu Nagar, Paramakudi";
 var isLoggedFromGoogle = "No";
 var gender = "Male";
 var country = "India";

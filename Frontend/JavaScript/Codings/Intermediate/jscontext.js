@@ -24,7 +24,7 @@ function sayHello() {
 console.log(hello); // accessed via the window object window.hello (it will through error here because node we don't have the global context)
 console.log(username); // Output: 30 (accessed via the window object) window.username
 console.log(country); // Output: "USA" (accessed via the window object) window.country
-sayHello(); 
+sayHello();
 
 // non global context
 console.log("Non Global Context WorkSpace Begin");
@@ -32,7 +32,6 @@ console.log("Non Global Context WorkSpace Begin");
 //     var name = "Alice";
 //     console.log("Hello, " + name);
 //   }
-  
+
 //   greet(); // Output: "Hello, Alice"
 //   console.log(name); // Output: ReferenceError: name is not defined
-  
