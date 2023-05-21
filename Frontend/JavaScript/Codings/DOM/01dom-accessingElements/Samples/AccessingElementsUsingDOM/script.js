@@ -5,7 +5,7 @@ titleElement.innerHTML = "Hello, JavaScript!";
 // Accessing elements by class name
 var paragraphs = document.getElementsByClassName("highlight");
 for (var i = 0; i < paragraphs.length; i++) {
-  paragraphs[i].style.color = "blue";
+  paragraphs[i].style.color = "black";
 }
 
 // Accessing the element by tag name
