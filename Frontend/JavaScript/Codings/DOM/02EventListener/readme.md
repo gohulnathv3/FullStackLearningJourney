@@ -1,5 +1,7 @@
 # Event Listener in JavaScript
 
+For official documentation [EventListener](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events)
+
 In JavaScript, event listeners are **used to handle and respond to events triggered by user interactions or other actions. Event listeners allow you to execute specific code when an event occurs on a DOM element.** Here's an example of how to add an event listener 
 
 ```javascript
