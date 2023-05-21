@@ -1,0 +1,1 @@
+// Event listeners provide a powerful mechanism to make your JavaScript code interactive and responsive to user actions. They allow you to define custom behaviors and respond to events happening within the browser environment.
