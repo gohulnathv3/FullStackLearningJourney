@@ -1,8 +1,13 @@
-const red = document.querySelector(".red");
-const cyan = document.querySelector(".red");
-const violet = document.querySelector(".red");
-const orange = document.querySelector(".red");
-const pink = document.querySelector(".red");
+var red = document.querySelector(".red");
+var cyan = document.querySelector(".cyan");
+var violet = document.querySelector(".violet");
+var orange = document.querySelector(".orange");
+var pink = document.querySelector(".pink");
 
 const center = document.querySelector(".center");
-console.log(window.getComputedStyle(red).backgroundColor);
+
+const getBGMcolor = (selectedElement) => {
+  return window.getComputedStyle(selectedElement).backgroundColor;
+};
+
+console.log(getBGMcolor(pink));
