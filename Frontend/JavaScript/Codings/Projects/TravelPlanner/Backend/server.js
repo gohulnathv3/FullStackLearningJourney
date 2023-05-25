@@ -1,4 +1,8 @@
 const express = require('express');
+const { MongoClient } = require('mongodb');
+// Mongo DB URL Connection
+const url = 'mongodb://localhost:27017';
+
 
 // Create an Express application
 const app = express();
