@@ -5,15 +5,18 @@ const url = "mongodb://localhost:27017";
 // Database and collection name
 const dbName = "travel_app_db";
 const destinationCollection = "destinations";
-// To create a Mongo Client 
-const client =  new MongoClient(url, {userNewParser: true, useUnifiedTopology: true});
+// To create a Mongo Client
+const client = new MongoClient(url, {
+  userNewParser: true,
+  useUnifiedTopology: true,
+});
 // Connect to MongoDB database
 client.connnect((err) => {
-  if(err) {
-    console.error('Failed to connect to the DB: ',err);
+  if (err) {
+    console.error("Failed to connect to the DB: ", err);
     return;
   }
-  console.log("Connected to the database")
+  console.log("Connected to the database");
 });
 
 // Create an Express application
