@@ -23,7 +23,15 @@ app.get('/api/users', (req, res) => {
     res.json(users);
   });
 
-  // Start the server
+// Example API route to handle POST request
+app.post('/api/users', (req, res) => {
+  // Replace this with your actual implementation
+  const { name } = req.body;
+  const newUser = { id: 3, name };
+  res.json(newUser);
+});
+
+// Start the server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
