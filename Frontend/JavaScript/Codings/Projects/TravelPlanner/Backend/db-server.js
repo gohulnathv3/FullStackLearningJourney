@@ -94,7 +94,7 @@ const Destination = mongoose.model("Destination", destinationSchema);
 
 async function retrieveDataFromCollection(req, res, Model) {
   try {
-    const data = await Model.find({});
+    const data = await Model.find({}).select("-__v");
     res.json(data);
   } catch (error) {
     console.error("Failed to fetch the data", error);
@@ -123,7 +123,7 @@ app.get("/api/v1/itineraries", async (req, res) => {
 });
 
 // For adding data into database
-app.post("/api/v1/users", async (req, res) => {
+app.post("/api/v1/add-users", async (req, res) => {
   try {
     const newData = req.body;
 
@@ -131,6 +131,48 @@ app.post("/api/v1/users", async (req, res) => {
     const savedUser = await user.save();
 
     res.status(201).json(savedUser);
+  } catch (error) {
+    console.error("Failed to add data", error);
+    res.status(500).json({ error: "Failed to add data" });
+  }
+});
+
+// For adding data into Destinations
+app.post("/api/v1/add-destinations", async (req, res) => {
+  try {
+    const newData = req.body;
+    const destination = new Destination(newData);
+    const savedDestinations = await destination.save();
+
+    res.status(201).json(savedDestinations);
+  } catch (error) {
+    console.error("Failed to add data", error);
+    res.status(500).json({ error: "Failed to add data" });
+  }
+});
+
+// For adding data into Itineraries
+app.post("/api/v1/add-itineraries", async (req, res) => {
+  try {
+    const newData = req.body;
+    const itineraries = new Itinerary(newData);
+    const savedItineraries = await itineraries.save();
+
+    res.status(201).json(savedItineraries);
+  } catch (error) {
+    console.error("Failed to add data", error);
+    res.status(500).json({ error: "Failed to add data" });
+  }
+});
+
+// For adding data into reviews
+app.post("/api/v1/add-reviews", async (req, res) => {
+  try {
+    const newData = req.body;
+    const reviews = new Review(newData);
+    const savedReviews = await reviews.save();
+
+    res.status(201).json(savedReviews);
   } catch (error) {
     console.error("Failed to add data", error);
     res.status(500).json({ error: "Failed to add data" });
