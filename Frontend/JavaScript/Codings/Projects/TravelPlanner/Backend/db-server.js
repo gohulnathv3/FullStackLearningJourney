@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 
 const app = express();
 const port = 4000;
@@ -12,48 +12,127 @@ const url = "mongodb://localhost:27017";
 const dbName = "travel_app_db";
 
 // function to estabilish connection
-async function connectToDatabase() {
-  const client = await MongoClient.connect(url, { useUnifiedTopology: true });
-  const db = client.db(dbName);
-  return { client, db };
-}
+mongoose
+  .connect(`${url}/${dbName}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+    // Start the server after successful connection
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the application with a non-zero status code
+  });
 
-// Route handler for retrieving data from a collection
-async function retrieveDataFromCollection(req, res, collectionName) {
+// Define user collection Schema
+const userSchema = new mongoose.Schema({
+  name: String,
+  phoneNumber: String,
+  gender: String,
+});
+// To Create Mongoose model
+const User = mongoose.model("User", userSchema);
+
+const destinationSchema = new mongoose.Schema({
+  place: String,
+  country: String,
+  description: String,
+});
+
+const reviewSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  destinationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Destination",
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+});
+
+const itinerarySchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  destinationId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Destination",
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+});
+
+const Review = mongoose.model("Review", reviewSchema);
+const Itinerary = mongoose.model("Itinerary", itinerarySchema);
+
+// Create a Mongoose model for the "destinations" collection
+const Destination = mongoose.model("Destination", destinationSchema);
+
+async function retrieveDataFromCollection(req, res, Model) {
   try {
-    const { client, db } = await connectToDatabase();
-    const collection = db.collection(collectionName);
-    const data = await collection.find({}).toArray();
-    client.close();
+    const data = await Model.find({});
     res.json(data);
   } catch (error) {
     console.error("Failed to fetch the data", error);
     res.status(500).json({ error: "Failed to fetch data" });
   }
 }
-
 // API routes for retrieving data from collection
 
 app.get("/api/v1/destinations", async (req, res) => {
-  retrieveDataFromCollection(req, res, "destinations");
+  retrieveDataFromCollection(req, res, Destination);
 });
 
 // to retrieve users
 app.get("/api/v1/users", async (req, res) => {
-  retrieveDataFromCollection(req, res, "users");
+  retrieveDataFromCollection(req, res, User);
 });
 
 // to retrieve reviews collections
 app.get("/api/v1/reviews", async (req, res) => {
-  retrieveDataFromCollection(req, res, "reviews");
+  retrieveDataFromCollection(req, res, Review);
 });
 
 // to retrive itineraries collections
 app.get("/api/v1/itineraries", async (req, res) => {
-  retrieveDataFromCollection(req, res, "itineraries");
+  retrieveDataFromCollection(req, res, Itinerary);
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// For adding data into database
+app.post("/api/v1/users", async (req, res) => {
+  try {
+    const newData = req.body;
+
+    const user = new User(newData);
+    const savedUser = await user.save();
+
+    res.status(201).json(savedUser);
+  } catch (error) {
+    console.error("Failed to add data", error);
+    res.status(500).json({ error: "Failed to add data" });
+  }
 });
