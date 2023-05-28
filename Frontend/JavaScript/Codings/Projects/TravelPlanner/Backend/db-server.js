@@ -28,15 +28,13 @@ mongoose
     console.error("Error connecting to MongoDB:", error);
     process.exit(1); // Exit the application with a non-zero status code
   });
-
+// Schema Creation
 // Define user collection Schema
 const userSchema = new mongoose.Schema({
   name: String,
   phoneNumber: String,
   gender: String,
 });
-// To Create Mongoose model
-const User = mongoose.model("User", userSchema);
 
 const destinationSchema = new mongoose.Schema({
   place: String,
@@ -86,10 +84,10 @@ const itinerarySchema = new mongoose.Schema({
   },
 });
 
+// To Create Mongoose model for respective collection
+const User = mongoose.model("User", userSchema);
 const Review = mongoose.model("Review", reviewSchema);
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
-
-// Create a Mongoose model for the "destinations" collection
 const Destination = mongoose.model("Destination", destinationSchema);
 
 async function retrieveDataFromCollection(req, res, Model) {
@@ -182,11 +180,11 @@ app.post("/api/v1/add-reviews", async (req, res) => {
 // Update Operation
 app.put("/api/v1/users/:name", async (req, res) => {
   const userName = req.params.name;
-  const udpatedData = req.body;
+  const updatedData = req.body;
   try {
     const updatedUser = await User.findOneAndUpdate(
       { name: userName },
-      udpatedData,
+      updatedData,
       { new: true }
     );
     if (!updatedUser) {
@@ -196,6 +194,25 @@ app.put("/api/v1/users/:name", async (req, res) => {
   } catch (error) {
     console.error("Failed to update user", error);
     res.status(500).json({ error: "Failed to update user" });
+  }
+});
+// Update Place in Destination
+app.put("/api/v1/destinations/:place", async (req, res) => {
+  const placeUpdate = req.params.place;
+  const udpatedData = req.body;
+  try {
+    const updatedPlace = await Destination.findOneAndUpdate(
+      { place: placeUpdate },
+      udpatedData,
+      { new: true }
+    );
+    if (!updatedPlace) {
+      return res.status(404).json({ error: "Place not found " });
+    }
+    res.json(updatedPlace);
+  } catch (error) {
+    console.error("Failed to update destination", error);
+    res.status(500).json({ error: "Failed to update destination" });
   }
 });
 // Delete Operation
@@ -213,5 +230,22 @@ app.delete("/api/v1/users/:name", async (req, res) => {
   } catch (error) {
     console.error("Failed to delete user", error);
     res.status(500).json({ error: "Failed to delete user" });
+  }
+});
+
+// To Delete Destinations
+app.delete("/api/v1/destinations/:place", async (req, res) => {
+  const destinationsPlaceName = req.params.place;
+  try {
+    const deleteDestination = await Destination.findOneAndDelete({
+      place: destinationsPlaceName,
+    });
+    if (!deleteDestination) {
+      return res.status(400).json({ error: "Destination not found" });
+    }
+    res.status(201).json({ error: "Destination deleted successfully" });
+  } catch (error) {
+    console.error("Failed to delete destination", error);
+    res.status(500).json({ error: "Failed to delete destination" });
   }
 });
