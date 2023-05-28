@@ -179,6 +179,25 @@ app.post("/api/v1/add-reviews", async (req, res) => {
   }
 });
 
+// Update Operation
+app.put("/api/v1/users/:name", async (req, res) => {
+  const userName = req.params.name;
+  const udpatedData = req.body;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { name: userName },
+      udpatedData,
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found " });
+    }
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Failed to update user", error);
+    res.status(500).json({ error: "Failed to update user" });
+  }
+});
 // Delete Operation
 app.delete("/api/v1/users/:name", async (req, res) => {
   const userName = req.params.name;
