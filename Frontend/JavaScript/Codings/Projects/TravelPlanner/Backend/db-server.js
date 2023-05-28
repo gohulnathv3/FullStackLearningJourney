@@ -178,3 +178,21 @@ app.post("/api/v1/add-reviews", async (req, res) => {
     res.status(500).json({ error: "Failed to add data" });
   }
 });
+
+// Delete Operation
+app.delete("/api/v1/users/:name", async (req, res) => {
+  const userName = req.params.name;
+
+  try {
+    const deletedUser = await User.findOneAndDelete({ name: userName });
+
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Failed to delete user", error);
+    res.status(500).json({ error: "Failed to delete user" });
+  }
+});
