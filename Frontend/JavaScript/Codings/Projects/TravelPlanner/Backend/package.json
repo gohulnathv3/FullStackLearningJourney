@@ -1,8 +1,10 @@
 {
   "main": "generateRandomData.js",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "express": "^4.18.2",
     "faker": "^5.5.3",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.5.0",
     "mongoose": "^7.2.1"
   },
