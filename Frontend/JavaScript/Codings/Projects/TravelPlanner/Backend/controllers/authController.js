@@ -1,16 +1,20 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../config/config");
-const User = require("../db-server");
+const User = require("../user/user");
 
 const register = async (req, res) => {
   try {
-    const existingUser = await User.findOne({ phoneNumber });
-    if (!existingUser) {
+    const { name, phoneNumber, gender, password } = req.body;
+
+    const existingUser = await User.findOne({ name });
+    if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
     }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+
     // Create User
     const user = new User({
       name,
@@ -18,7 +22,9 @@ const register = async (req, res) => {
       gender,
       password: hashedPassword,
     });
+
     await user.save();
+
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error("Failed to register user", error);
