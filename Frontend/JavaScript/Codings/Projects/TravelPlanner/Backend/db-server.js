@@ -17,9 +17,15 @@ const authenticationToken = require("./middleware/authMiddleware");
 
 // API routes for authentication
 const authController = require("./controllers/authController");
+const authenticateToken = require("./middleware/authMiddleware");
 app.post("/api/v1/register",authController.register);
 app.post("/app/v1/login",authController.login);
 
+// Protected Routes 
+app.get("/api/v1/destinations", authenticateToken, async (req, res) => {
+  // only authenticated users can access this route 
+  retrieveDataFromCollection(req,res, Destination);
+})
 
 // function to estabilish connection
 mongoose
