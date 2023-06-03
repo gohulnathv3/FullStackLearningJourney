@@ -11,6 +11,16 @@ app.use(express.json());
 const url = "mongodb://localhost:27017";
 const dbName = "travel_app_db";
 
+// Load the configuration Variables
+const {JWT_SECRET} = require("./config/config");
+const authenticationToken = require("./middleware/authMiddleware");
+
+// API routes for authentication
+const authController = require("./controllers/authController");
+app.post("/api/v1/register",authController.register);
+app.post("/app/v1/login",authController.login);
+
+
 // function to estabilish connection
 mongoose
   .connect(`${url}/${dbName}`, {
