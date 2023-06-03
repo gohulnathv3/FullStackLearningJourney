@@ -12,20 +12,20 @@ const url = "mongodb://localhost:27017";
 const dbName = "travel_app_db";
 
 // Load the configuration Variables
-const {JWT_SECRET} = require("./config/config");
+const { JWT_SECRET } = require("./config/config");
 const authenticationToken = require("./middleware/authMiddleware");
 
 // API routes for authentication
 const authController = require("./controllers/authController");
 const authenticateToken = require("./middleware/authMiddleware");
-app.post("/api/v1/register",authController.register);
-app.post("/app/v1/login",authController.login);
+app.post("/api/v1/register", authController.register);
+app.post("/api/v1/login", authController.login);
 
-// Protected Routes 
+// Protected Routes
 app.get("/api/v1/destinations", authenticateToken, async (req, res) => {
-  // only authenticated users can access this route 
-  retrieveDataFromCollection(req,res, Destination);
-})
+  // only authenticated users can access this route
+  retrieveDataFromCollection(req, res, Destination);
+});
 
 // function to estabilish connection
 mongoose
@@ -46,11 +46,6 @@ mongoose
   });
 // Schema Creation
 // Define user collection Schema
-const userSchema = new mongoose.Schema({
-  name: String,
-  phoneNumber: String,
-  gender: String,
-});
 
 const destinationSchema = new mongoose.Schema({
   place: String,
@@ -101,10 +96,11 @@ const itinerarySchema = new mongoose.Schema({
 });
 
 // To Create Mongoose model for respective collection
-const User = mongoose.model("User", userSchema);
+const User = require('./user/user');
 const Review = mongoose.model("Review", reviewSchema);
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 const Destination = mongoose.model("Destination", destinationSchema);
+
 
 async function retrieveDataFromCollection(req, res, Model) {
   try {
@@ -117,9 +113,9 @@ async function retrieveDataFromCollection(req, res, Model) {
 }
 // API routes for retrieving data from collection
 
-app.get("/api/v1/destinations", async (req, res) => {
-  retrieveDataFromCollection(req, res, Destination);
-});
+// app.get("/api/v1/destinations", async (req, res) => {
+//   retrieveDataFromCollection(req, res, Destination);
+// });
 
 // to retrieve users
 app.get("/api/v1/users", async (req, res) => {
@@ -265,3 +261,8 @@ app.delete("/api/v1/destinations/:place", async (req, res) => {
     res.status(500).json({ error: "Failed to delete destination" });
   }
 });
+
+
+
+// Export the User model
+module.exports = User;
