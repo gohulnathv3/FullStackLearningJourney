@@ -96,11 +96,10 @@ const itinerarySchema = new mongoose.Schema({
 });
 
 // To Create Mongoose model for respective collection
-const User = require('./user/user');
+const User = require("./schemas/user");
 const Review = mongoose.model("Review", reviewSchema);
 const Itinerary = mongoose.model("Itinerary", itinerarySchema);
 const Destination = mongoose.model("Destination", destinationSchema);
-
 
 async function retrieveDataFromCollection(req, res, Model) {
   try {
@@ -261,8 +260,6 @@ app.delete("/api/v1/destinations/:place", async (req, res) => {
     res.status(500).json({ error: "Failed to delete destination" });
   }
 });
-
-
 
 // Export the User model
 module.exports = User;
